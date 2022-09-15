@@ -1,0 +1,23 @@
+.review-style {
+    width: 80%;
+    height: 350px;
+    padding-top: 50px;
+    
+    text-align: left;
+    
+  }
+  
+  .review-slid{
+    background-position: center;
+    background-size: cover;
+    width: 600px;
+    
+    
+    
+    
+  }
+  
+  .review-slid img {
+    display: block;
+    width: 100%;
+  }
