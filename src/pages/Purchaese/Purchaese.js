@@ -3,12 +3,15 @@ import { useAuthState } from 'react-firebase-hooks/auth';
 import { useForm } from 'react-hook-form';
 import { useNavigate, useParams } from 'react-router-dom';
 import auth from '../../firebase.init';
-import Loading from '../Loading/Loading';
+import Loading from '../Common/Loading';
+
 import Review from '../Review/Review';
 
 const Purchaese = () => {
     const [user, loading, error] = useAuthState(auth);
-    
+    if(loading){
+        <Loading />
+    }
     
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
     let { id } = useParams()
@@ -37,7 +40,7 @@ const Purchaese = () => {
             .then(result => console.log(result))
 
         if (data.title && data.quantity) {
-            navigate('/dashboard/myorder')
+            navigate('/viewCart')
         }
 
 
@@ -79,7 +82,7 @@ const Purchaese = () => {
                                 </label>
                             </div> */}
                             <label htmlFor="my-modal-6" className="btn modal-button">Add To Cart</label>
-                            <button htmlFor="my-modal-6" className="btn modal-button">Extra Items</button>
+                            
                             <input type="checkbox" id="my-modal-6" className="modal-toggle" />
                             <div className="modal modal-bottom sm:modal-middle">
                                 <div className="modal-box">
@@ -90,9 +93,9 @@ const Purchaese = () => {
                                             </label>
                                             <input {...register("name", { required: true })} type="text"  className="input input-bordered" />
                                             <label className="label">
-                                                <span className="label-text">Your Table Number</span>
+                                                <span className="label-text">Your Table Mail</span>
                                             </label>
-                                            <input value={user?.email.slice(0,6)} {...register("tableNumber", { required: true })} type="number"  className="input input-bordered" />
+                                            <input value={user?.email} {...register("email", { required: true })} type="text"  className="input input-bordered" />
                                             <label class="label">
                                                 <span class="label-text">Product Title</span>
                                             </label>

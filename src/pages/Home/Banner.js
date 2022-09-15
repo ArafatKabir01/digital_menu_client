@@ -11,12 +11,13 @@ import "swiper/css/pagination";
 import "./Banner.css";
 import {Autoplay, EffectFade, Navigation, Pagination } from "swiper";
 import { useQuery } from "react-query";
+import Loading from "../Common/Loading";
 
 const Banner = () => {
     const { data: bItems, isLoading, refetch } = useQuery('bItems', () => fetch('http://localhost:5000/bannerItems')
         .then(res => res.json()));
     if (isLoading) {
-        return console.log('loading')
+        return <Loading/>
     }
     console.log(bItems)
 
@@ -49,7 +50,7 @@ const Banner = () => {
                                             <h1 className="text-5xl font-bold">Box Office News!</h1>
                                             <p className="py-6">Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda excepturi exercitationem quasi. In deleniti eaque aut repudiandae et a id nisi.</p>
                                             <div className="w-50 h-50 m-4 text-xl font-bold	text-white" >
-                                                <h2 >Price: {}&</h2>
+                                                <h2 >Price: 350 TK</h2>
                                             </div>
                                             <button className="btn btn-success">Add To Cart</button>
                                         </div>

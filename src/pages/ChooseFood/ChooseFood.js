@@ -3,7 +3,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/free-mode";
 import "swiper/css/pagination";
-
+import Slider from '@material-ui/core/Slider';
 import "./ChooseFood.css";
 
 // import required modules
@@ -11,11 +11,11 @@ import { FreeMode, Pagination } from "swiper";
 import FilterOption from "./FilterOption";
 import UseFoods from "../../Hooks/UseFoods";
 import { useNavigate } from "react-router-dom";
-import RatingStar from "../Common/RatingStar";
 import Rating from "react-rating";
 import { useState } from "react";
 const ChooseFood = () => {
     const [search , setSearch] = useState('')
+    const [selectedPrice, setSelectedPrice] = useState(0);
     const [product, setProduct] = UseFoods()
     const navigate = useNavigate();
     const navigateToProductInfo = id => {
@@ -27,6 +27,54 @@ const ChooseFood = () => {
         setSearch(result)
         
     }
+
+    const handleCheckBd =(e)=>{
+        console.log(e.target.checked)
+        if(e.target.checked === true){
+                fetch(`http://localhost:5000/cuisine/chinese`)
+                .then(res => res.json())
+                .then(data => setProduct(data))
+        }
+        else if(e.target.checked === false){
+            fetch('http://localhost:5000/allFoods')
+            .then(res => res.json())
+            .then(data => setProduct(data))
+
+        }
+    }
+    const handleCheckCh =(e)=>{
+        console.log(e.target.checked)
+        if(e.target.checked === true){
+            fetch(`http://localhost:5000/cuisine/italian`)
+            .then(res => res.json())
+            .then(data => setProduct(data))
+    }
+    else if(e.target.checked === false){
+        fetch('http://localhost:5000/allFoods')
+        .then(res => res.json())
+        .then(data => setProduct(data))
+
+    }
+    }
+    const handleCheckIn =(e)=>{
+        console.log(e.target.checked)
+        if(e.target.checked === true){
+            fetch(`http://localhost:5000/cuisine/american`)
+            .then(res => res.json())
+            .then(data => setProduct(data))
+    }
+    else if(e.target.checked === false){
+        fetch('http://localhost:5000/allFoods')
+        .then(res => res.json())
+        .then(data => setProduct(data))
+
+    }
+    }
+ 
+    const changePrice = (event, value) => {
+        setSelectedPrice(value);
+    }
+ 
     
     return (
         <div>
@@ -49,11 +97,17 @@ const ChooseFood = () => {
                         >
                             {
                                   product.filter(value =>{
-                                    if(search === ""){
+                                    if(search === "" ){
                                         return value;
                                     }else if(value.title.toLowerCase().includes(search.toLowerCase())){
-                                        return value
+                                        return value 
+                                        
+                                    }else if(value.price >= 1000
+                                        && value.price <= selectedPrice ){
+                                        return value    
                                     }
+                                  
+                                        
                                 }).map( value => {
                                     return ( 
                                     <SwiperSlide className="foodSwiperSlid">
@@ -61,6 +115,7 @@ const ChooseFood = () => {
                                         <figure><img data-aos="zoom-in" data-aos-duration="2000" className='h-80 w-full' src={value.coverSrc} alt="Shoes" /></figure>
                                         <div  className="card-body text-left">
                                             <h2 className="card-title">{value.title}</h2>
+                                            <p className="">{value.cuisine}</p>
                                             {/* <p>{value.details}</p> */}
                                             <div className=' font-bold text-white'>
                                                 <p>Price : {value.price} TK</p>
@@ -144,14 +199,46 @@ const ChooseFood = () => {
                     <label htmlFor="my-drawer-2" className="drawer-overlay"></label>
                     <ul className="menu p-4 overflow-y-auto w-80 bg-base-100 text-base-content ">
                         {/* <!-- Sidebar content here --> */}
-                        <div className="input-group">
+                        <div className="input-group mt-20">
 
                     <button className="btn btn-square">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" /></svg>
                     </button>
                     <input onChange={searchFood} type="text" placeholder="Search…" className="input input-bordered" />
                 </div>
-                        <FilterOption />
+                {/* Category  */}
+
+                <div className="form-control  mt-8">
+                    <h2>Cuisine</h2>
+                    <label className="cursor-pointer label">
+                        <span className="label-text">Chinese</span>
+                        <input onChange={handleCheckBd}  type="checkbox"  className="checkbox checkbox-accent" />
+                    </label>
+                </div>
+                <div className="form-control">
+                    <label className="cursor-pointer label">
+                        <span className="label-text">Italian</span>
+                        <input onChange={handleCheckCh} type="checkbox"  className="checkbox checkbox-accent" />
+                    </label>
+                </div>
+                <div className="form-control ">
+                    <label className="cursor-pointer label">
+                        <span className="label-text">American</span>
+                        <input onChange={handleCheckIn} type="checkbox"  className="checkbox checkbox-accent" />
+                    </label>
+                </div>
+                <div className="form-control mt-20">
+                <p className='label-range mt-8'>Price Range</p>
+                <div className="">
+                    <Slider
+                        onChange={changePrice}
+                        valueLabelDisplay='on'
+                        min={1000}
+                        max={5000}
+                        className=""
+                    />
+                </div>
+            </div>
                     </ul>
 
                 </div>
